@@ -5,7 +5,7 @@ import sounddevice as sd
 import numpy as np
 
 
-def load_model():
+def load_stt_model():
     
     """Models vars"""
     model_size = "small"
