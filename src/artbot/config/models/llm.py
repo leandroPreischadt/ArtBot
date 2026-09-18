@@ -7,7 +7,6 @@ def load_llm_model():
     llm = Llama(model_path=MODEL_ID,n_ctx=2048,verbose=False )
     return llm
 
-
 def llm_model(llm, text): 
     response = llm.create_chat_completion(
         messages=[
