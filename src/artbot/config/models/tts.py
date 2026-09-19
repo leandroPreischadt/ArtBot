@@ -13,7 +13,7 @@ def load_piper_model():
 def piper_model(voice, text):
     audio_chunks = []
 
-    for chunk in voice.synthesize(text["choices"][0]["message"]["content"]): # type: ignore
+    for chunk in voice.synthesize(text): # type: ignore
         audio_chunks.append(chunk.audio_int16_bytes)
 
     audio_bytes = b"".join(audio_chunks)
@@ -21,3 +21,4 @@ def piper_model(voice, text):
 
     sd.play(audio_array, samplerate=voice.config.sample_rate)
     sd.wait()
+    

@@ -25,7 +25,7 @@ def main() -> None:
         
         llm_answer = llm_model(llm=loaded_llm_model, text=my_text)
         
-        piper_model(voice=loaded_tts_model, text=my_text)
+        piper_model(voice=loaded_tts_model, text=llm_answer)
         
 
 

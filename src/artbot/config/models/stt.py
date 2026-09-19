@@ -20,7 +20,7 @@ def load_stt_model():
 def whisper_model(model): 
     
     """Recording Vars"""
-    duration = 7.0
+    duration = 5.0
     fs = 16000
     number_channels = 1
     
