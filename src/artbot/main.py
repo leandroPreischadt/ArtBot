@@ -27,7 +27,5 @@ def main() -> None:
         
         piper_model(voice=loaded_tts_model, text=llm_answer)
         
-
-
 if __name__ == "__main__":
     main()
