@@ -5,8 +5,8 @@ import numpy as np
 import queue
 import collections
 import webrtcvad
-import pvporcupine
-
+import openwakeword
+from openwakeword.model import Model
 #Implementar um wake word no sistema stt
 
 
