@@ -25,7 +25,9 @@ dependencies = [
     { name = "numpy" },
     { name = "piper-tts" },
     { name = "python-dotenv" },
+    { name = "setuptools" },
     { name = "sounddevice" },
+    { name = "webrtcvad" },
 ]
 
 [package.metadata]
@@ -35,7 +37,9 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.5.3" },
     { name = "piper-tts", specifier = ">=1.8.0" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
+    { name = "setuptools", specifier = "<81" },
     { name = "sounddevice", specifier = ">=0.5.6" },
+    { name = "webrtcvad", specifier = ">=2.0.10" },
 ]
 
 [[package]]
@@ -655,6 +659,15 @@ wheels = [
 ]
 
 [[package]]
+name = "setuptools"
+version = "80.10.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/76/95/faf61eb8363f26aa7e1d762267a8d602a1b26d4f3a1e758e92cb3cb8b054/setuptools-80.10.2.tar.gz", hash = "sha256:8b0e9d10c784bf7d262c4e5ec5d4ec94127ce206e8738f29a437945fbc219b70", size = 1200343, upload-time = "2026-01-25T22:38:17.252Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/94/b8/f1f62a5e3c0ad2ff1d189590bfa4c46b4f3b6e49cef6f26c6ee4e575394d/setuptools-80.10.2-py3-none-any.whl", hash = "sha256:95b30ddfb717250edb492926c92b5221f7ef3fbcc2b07579bcd4a27da21d0173", size = 1064234, upload-time = "2026-01-25T22:38:15.216Z" },
+]
+
+[[package]]
 name = "sounddevice"
 version = "0.5.6"
 source = { registry = "https://pypi.org/simple" }
@@ -717,3 +730,9 @@ sdist = { url = "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3
 wheels = [
     { url = "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl", hash = "sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8", size = 45571, upload-time = "2026-07-02T08:40:04.659Z" },
 ]
+
+[[package]]
+name = "webrtcvad"
+version = "2.0.10"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/89/34/e2de2d97f3288512b9ea56f92e7452f8207eb5a0096500badf9dfd48f5e6/webrtcvad-2.0.10.tar.gz", hash = "sha256:f1bed2fb25b63fb7b1a55d64090c993c9c9167b28485ae0bcdd81cf6ede96aea", size = 66156, upload-time = "2017-01-07T23:05:18.732Z" }
