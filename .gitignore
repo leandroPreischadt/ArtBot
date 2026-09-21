@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Pacotes e builds
+build/
+dist/
+wheels/
+*.egg-info/
+.eggs/
+
+# Ambientes virtuais e ferramentas de gerenciamento
+.venv/
+venv/
+env/
+ENV/
+.uv/
+
+# Variáveis de ambiente e segredos locais
+.env
+.env.*
+!.env.example
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testes, cobertura e type checkers
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Caches, modelos e arquivos gerados pela execução na Jetson
+.cache/
+cache/
+models/
+downloads/
+data/
+recordings/
+audio/
+*.wav
+*.mp3
+*.ogg
+*.log
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
