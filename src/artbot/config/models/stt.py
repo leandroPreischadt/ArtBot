@@ -5,6 +5,10 @@ import numpy as np
 import queue
 import collections
 import webrtcvad
+import pvporcupine
+
+#Implementar um wake word no sistema stt
+
 
 SAMPLE_RATE = 16000
 CHANNELS = 1
@@ -29,7 +33,7 @@ def audio_callback(indata, frames, time_info, status):
     audio_queue.put(indata.copy().tobytes())
     
 def record_until_silance():
-    vad = webrtcvad.Vad(2)
+    vad = webrtcvad.Vad(3)
     buffer = bytearray()
     
     pre_roll = collections.deque(maxlen=10)

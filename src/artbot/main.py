@@ -19,7 +19,8 @@ def main() -> None:
     
     """Executing programm"""
     while True:
-        input("Press enter to start recording: ")
+        
+        input("Press to start recording: ")
         
         my_text = whisper_model(loaded_stt_model)
         
