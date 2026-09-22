@@ -17,7 +17,7 @@ def load_stt_model():
     
     """Models vars"""
     model_size = "small"
-    device_type = "cpu"
+    device_type = DEVICE
     compute_type = "int8_float16" if device_type == "cuda" else "int8"
     
     """initiating model"""
