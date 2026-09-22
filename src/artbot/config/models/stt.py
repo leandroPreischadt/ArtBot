@@ -5,10 +5,6 @@ import numpy as np
 import queue
 import collections
 import webrtcvad
-import openwakeword
-from openwakeword.model import Model
-#Implementar um wake word no sistema stt
-
 
 SAMPLE_RATE = 16000
 CHANNELS = 1
