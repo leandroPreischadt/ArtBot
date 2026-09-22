@@ -1,10 +1,10 @@
 from llama_cpp import Llama
-from artbot.config.settings import MODEL_NAME
+from artbot.config.settings import MODEL_NAME, N_CTX
 
 def load_llm_model(): 
     MODEL_ID = MODEL_NAME
     
-    llm = Llama(model_path=MODEL_ID,n_ctx=2048,verbose=False )
+    llm = Llama(model_path=MODEL_ID,n_ctx=N_CTX,verbose=False )
     return llm
 
 def llm_model(llm, text): 
