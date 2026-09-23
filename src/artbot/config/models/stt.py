@@ -21,7 +21,7 @@ def load_stt_model():
     compute_type = "int8_float16" if device_type == "cuda" else "int8"
     
     """initiating model"""
-    model = WhisperModel(model_size, device=device_type, compute_type=compute_type)
+    model = WhisperModel(model_size, device="cpu", compute_type="int8")
     
     return model
 
