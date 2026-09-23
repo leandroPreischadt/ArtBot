@@ -11,14 +11,11 @@ def load_piper_model():
     return voice
 
 def piper_model(voice, text):
-    audio_chunks = []
-
-    for chunk in voice.synthesize(text): # type: ignore
-        audio_chunks.append(chunk.audio_int16_bytes)
-
-    audio_bytes = b"".join(audio_chunks)
-    audio_array = np.frombuffer(audio_bytes, dtype=np.int16)
-
-    sd.play(audio_array, samplerate=voice.config.sample_rate)
-    sd.wait()
+    with sd.RawOutputStream(
+    samplerate=voice.config.sample_rate,
+    channels=1,
+    dtype="int16",
+) as stream:
+        for chunk in voice.synthesize(text):
+            stream.write(chunk.audio_int16_bytes)
     

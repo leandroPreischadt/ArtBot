@@ -18,6 +18,7 @@ venv/
 env/
 ENV/
 .uv/
+uv.lock
 
 # Variáveis de ambiente e segredos locais
 .env
