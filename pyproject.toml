@@ -19,13 +19,21 @@ dependencies = [
     "webrtcvad>=2.0.10",
     "openwakeword>=0.4.0",
     "requests>=2.34.2",
+    "artbot-face",
 ]
 
 [project.scripts]
 artbot = "artbot.main:main"
+artbot-start = "artbot.start:main"
 
 [tool.uv]
 no-binary-package = ["llama-cpp-python"]
+
+[tool.uv.workspace]
+members = ["artbot.face"]
+
+[tool.uv.sources]
+artbot-face = { workspace = true }
 
 [build-system]
 requires = ["uv_build>=0.12.6,<0.13.0"]

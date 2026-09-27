@@ -1,0 +1,20 @@
+[project]
+name = "artbot-face"
+version = "0.1.0"
+description = "Face do ArtBot: janela arcade com animações e endpoint HTTP de estado"
+requires-python = ">=3.12"
+dependencies = [
+    "arcade>=3.3.3",
+    "fastapi[standard]>=0.141.1",
+]
+
+[project.scripts]
+artbot-face = "artbot.face.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "artbot.face"
+namespace = true
