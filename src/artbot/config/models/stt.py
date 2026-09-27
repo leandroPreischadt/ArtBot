@@ -1,5 +1,10 @@
 from faster_whisper import WhisperModel
-from artbot.config.settings import DEVICE
+from artbot.config.settings import (
+    DEVICE,
+    VAD_AGGRESSIVENESS,
+    START_FRAMES,
+    END_SILENCE_FRAMES,
+)
 import sounddevice as sd
 import numpy as np
 import queue
@@ -29,7 +34,7 @@ def audio_callback(indata, frames, time_info, status):
     audio_queue.put(indata.copy().tobytes())
     
 def record_until_silance():
-    vad = webrtcvad.Vad(3)
+    vad = webrtcvad.Vad(VAD_AGGRESSIVENESS)
     buffer = bytearray()
     
     pre_roll = collections.deque(maxlen=10)
@@ -37,9 +42,6 @@ def record_until_silance():
     speech_started = False
     voiced_frames = 0
     silent_frames = 0
-    
-    START_FRAMES = 3
-    END_SILENCE_FRAMES = 15
     
     print("Waiting voice...")
     
@@ -87,7 +89,7 @@ def record_until_silance():
                     print("Recorded voice.")
                     break
     audio = np.frombuffer(buffer, dtype=np.int16)
-    audio = audio.astype(np.float32) / 32768.0
+    audio = audio.astype(np.float32) / 32768.0 # type: ignore
 
     return audio
 

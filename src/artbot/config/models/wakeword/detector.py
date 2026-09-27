@@ -5,6 +5,8 @@ import openwakeword
 import sounddevice as sd
 from openwakeword.model import Model
 
+from artbot.config.settings import WAKEWORD_THRESHOLD
+
 SAMPLE_RATE = 16000
 CHANNELS = 1
 
@@ -67,7 +69,7 @@ class WakeWordDetector:
 
                 for wake_word, confidence in prediction.items():
 
-                    if confidence >= 0.5:
+                    if confidence >= WAKEWORD_THRESHOLD:
 
                         print(
                             f"Wake word detectada: "
