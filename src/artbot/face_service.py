@@ -1,6 +1,6 @@
 import requests
 
-from artbot.config.settings import FACE_SERVICE_URL
+from artbot.config.settings import HTTP_PORT
 from artbot.face.state import FaceState
 
 
@@ -20,10 +20,10 @@ class FaceService:
         self._notify()
 
     def _notify(self):
-        if not FACE_SERVICE_URL:
+        if not HTTP_PORT:
             return
         try:
-            requests.put(f"{FACE_SERVICE_URL}/{self._state.name}", timeout=2)
+            requests.put(f"http://localhost:{HTTP_PORT}/state/{self._state.name}", timeout=2)
         except requests.RequestException as exc:
             print(f"FaceService: falha ao notificar estado '{self._state.name}': {exc}")
 

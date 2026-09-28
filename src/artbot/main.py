@@ -35,7 +35,7 @@ def main() -> None:
         
         face_service.set_state(FaceState.SPEAKING)
         piper_model(voice=loaded_tts_model, text=llm_answer)
-        
+
         face_service.set_state(FaceState.IDLE)
         
 if __name__ == "__main__":

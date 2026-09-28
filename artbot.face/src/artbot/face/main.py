@@ -2,6 +2,7 @@ import threading
 from pathlib import Path
 
 import arcade
+from artbot.face.config.settings import HTTP_PORT
 import uvicorn
 from arcade.sprite.animated import TextureAnimation, TextureAnimationSprite, TextureKeyframe
 from fastapi import FastAPI, HTTPException
@@ -10,7 +11,6 @@ from PIL import Image
 from artbot.face.state import FaceState
 
 WINDOW_TITLE = "Robot Face"
-PORT = 8000
 
 EYES_SCALE = 0.5
 MOUTH_SCALE = 0.5
@@ -24,7 +24,7 @@ SPRITES_DIR = Path(__file__).parent / "assets"
 current_state = FaceState.IDLE
 
 STATE_GIFS = {
-    FaceState.IDLE:     {"eyes": "eyes-lookin-arround.gif", "mouth": "mouth-idle.gif"},
+    FaceState.IDLE:     {"eyes": "eyes-bored.gif", "mouth": "mouth-idle.gif"},
     FaceState.SPEAKING: {"eyes": "eyes-lookin-arround.gif", "mouth": "mouth-speaking.gif"},
     FaceState.THINKING: {"eyes": "eyes-thinking.gif",       "mouth": "mouth-thinking.gif"},
     FaceState.BORED:    {"eyes": "eyes-bored.gif",          "mouth": "mouth-idle.gif"},
@@ -176,7 +176,7 @@ def set_state(state: str) -> dict[str, str]:
 
 def main():
     threading.Thread(
-        target=lambda: uvicorn.run(app, host="127.0.0.1", port=PORT, log_level="info"),
+        target=lambda: uvicorn.run(app, host="127.0.0.1", port=HTTP_PORT, log_level="info"),
         daemon=True,
     ).start()
 

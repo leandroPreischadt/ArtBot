@@ -16,4 +16,4 @@ START_FRAMES = int(os.getenv("START_FRAMES", "3"))
 END_SILENCE_FRAMES = int(os.getenv("END_SILENCE_FRAMES", "40"))
 WAKEWORD_THRESHOLD = float(os.getenv("WAKEWORD_THRESHOLD", "0.5"))
 
-FACE_SERVICE_URL = os.getenv("FACE_SERVICE_URL", "")
+HTTP_PORT = os.getenv("HTTP_PORT", "")

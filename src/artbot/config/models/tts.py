@@ -9,9 +9,6 @@ def load_piper_model():
     return voice
 
 def piper_model(voice, text):
-    with sd.RawOutputStream(
-    samplerate=voice.config.sample_rate,
-    channels=1,
-    dtype="int16",) as stream:
+    with sd.RawOutputStream(samplerate=voice.config.sample_rate, channels=1, dtype="int16",) as stream:
         for chunk in voice.synthesize(text):
             stream.write(chunk.audio_int16_bytes)
