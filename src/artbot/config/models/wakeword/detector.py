@@ -1,24 +1,24 @@
 import queue
-
 import numpy as np
 import openwakeword
 import sounddevice as sd
 from openwakeword.model import Model
 
-from artbot.config.settings import WAKEWORD_THRESHOLD
+from artbot.config.settings import AUDIO_DEVICE, WAKEWORD_THRESHOLD
 
-SAMPLE_RATE = 16000
-CHANNELS = 1
-
-FRAME_SAMPLES = 1280
+# Variáveis do Hardware (DJI Mic)
+SAMPLE_RATE_HW = 48000 
+CHANNELS_HW = 2
+FRAME_SAMPLES_HW = 3840 # Equivalente a 1280 (exigido pelo OpenWakeWord) * 3
 
 audio_queue = queue.Queue()
 
 def audio_callback(indata, frames, time_info, status):
     if status:
         print(status)
-
-    audio_queue.put(indata.copy())
+    # O DJI entrega estéreo em 48 kHz; o OpenWakeWord recebe mono em 16 kHz.
+    mono = indata.mean(axis=1).astype(np.int16)
+    audio_queue.put(mono[::3].copy())
 
 class WakeWordDetector:
 
@@ -45,36 +45,33 @@ class WakeWordDetector:
         )
 
     def listen(self):
-
         self._clear_queue()
         self._reset_model_state()
 
         print("Waiting wake word...")
 
         with sd.InputStream(
-            samplerate=SAMPLE_RATE,
-            channels=CHANNELS,
+            device=AUDIO_DEVICE,
+            samplerate=SAMPLE_RATE_HW,
+            channels=CHANNELS_HW,
             dtype="int16",
-            blocksize=FRAME_SAMPLES,
+            blocksize=FRAME_SAMPLES_HW, # Passando a variável de hardware correta
             callback=audio_callback,
         ):
 
             while True:
-
                 frame = audio_queue.get()
 
+                # O frame já sai do callback reduzido, pronto para a IA
                 frame = frame.flatten()
 
                 prediction = self.model.predict(frame)
 
                 for wake_word, confidence in prediction.items():
-
                     if confidence >= WAKEWORD_THRESHOLD:
-
                         print(
                             f"Wake word detectada: "
                             f"{wake_word} "
                             f"(confidence={confidence:.2f})"
                         )
-
                         return True

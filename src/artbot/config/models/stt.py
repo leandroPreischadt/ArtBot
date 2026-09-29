@@ -1,6 +1,7 @@
 from faster_whisper import WhisperModel
 from artbot.config.settings import (
     DEVICE,
+    AUDIO_DEVICE,
     VAD_AGGRESSIVENESS,
     START_FRAMES,
     END_SILENCE_FRAMES,
@@ -11,29 +12,43 @@ import queue
 import collections
 import webrtcvad
 
-SAMPLE_RATE = 16000
-CHANNELS = 1
+# Variáveis do Hardware (DJI Mic)
+SAMPLE_RATE_HW = 48000     
+CHANNELS_HW = 2
 FRAME_MS = 30
-FRAME_SAMPLES = int(SAMPLE_RATE * FRAME_MS / 1000)
+FRAME_SAMPLES_HW = int(SAMPLE_RATE_HW * FRAME_MS / 1000) # 1440 amostras
+
+# Variáveis para a IA (Whisper/VAD)
+SAMPLE_RATE_AI = 16000
+FRAME_SAMPLES_AI = int(SAMPLE_RATE_AI * FRAME_MS / 1000) # 480 amostras
 
 audio_queue = queue.Queue()
 
 def load_stt_model():
-    
     """Models vars"""
     model_size = "small"
     device_type = DEVICE
     compute_type = "int8_float16" if device_type == "cuda" else "int8"
     
     """initiating model"""
-    model = WhisperModel(model_size, device="cpu", compute_type="int8")
+    # Corrigido para habilitar a GPU (Jetson)
+    model = WhisperModel(model_size, device="cpu", compute_type=compute_type)
     
     return model
 
 def audio_callback(indata, frames, time_info, status):
-    audio_queue.put(indata.copy().tobytes())
+    if status:
+        print(f"Audio input status: {status}")
+
+    # O DJI entrega estéreo em 48 kHz. O Whisper/VAD usa mono em 16 kHz.
+    # Os dois canais do receptor são somados para não depender de qual
+    # transmissor está associado ao canal esquerdo.
+    mono = indata.mean(axis=1).astype(np.int16)
+
+    # Downsample 48 kHz -> 16 kHz.
+    audio_queue.put(mono[::3].copy().tobytes())
     
-def record_until_silance():
+def record_until_silence():
     vad = webrtcvad.Vad(VAD_AGGRESSIVENESS)
     buffer = bytearray()
     
@@ -46,21 +61,24 @@ def record_until_silance():
     print("Waiting voice...")
     
     with sd.InputStream(
-        samplerate=SAMPLE_RATE,
-        channels=CHANNELS,
+        device=AUDIO_DEVICE,
+        samplerate=SAMPLE_RATE_HW,
+        channels=CHANNELS_HW,
         dtype="int16",
-        blocksize=FRAME_SAMPLES,
+        blocksize=FRAME_SAMPLES_HW,
         callback=audio_callback,
     ):
          while True:
             frame = audio_queue.get()
 
-            expected_bytes = FRAME_SAMPLES * 2
+            # Como o frame já foi convertido no callback, esperamos os bytes de 16kHz
+            expected_bytes = FRAME_SAMPLES_AI * 2
             
             if len(frame) != expected_bytes:
                 continue
             
-            is_speech = vad.is_speech(frame, SAMPLE_RATE)
+            # O VAD analisa o áudio convertido a 16000 Hz
+            is_speech = vad.is_speech(frame, SAMPLE_RATE_AI)
             
             if not speech_started:
                 pre_roll.append(frame)
@@ -88,16 +106,16 @@ def record_until_silance():
                 if silent_frames >= END_SILENCE_FRAMES:
                     print("Recorded voice.")
                     break
+                    
     audio = np.frombuffer(buffer, dtype=np.int16)
     audio = audio.astype(np.float32) / 32768.0 # type: ignore
 
     return audio
 
 def whisper_model(model): 
+    audio = record_until_silence()
     
-    audio = record_until_silance()
-    
-    segments, info = model.transcribe(audio, beam_size=5, vad_filter= False)
+    segments, info = model.transcribe(audio, beam_size=5, vad_filter=False)
             
     text = "".join(segment.text for segment in segments).strip()
 

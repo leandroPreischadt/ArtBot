@@ -1,5 +1,10 @@
 from llama_cpp import Llama
+from pathlib import Path
+import json
+
 from artbot.config.settings import MODEL_NAME, N_CTX
+
+SYSTEM_PROMPT_PATH = Path(__file__).with_name("system_prompt.json")
 
 def load_llm_model(): 
     MODEL_ID = MODEL_NAME
@@ -8,11 +13,14 @@ def load_llm_model():
     return llm
 
 def llm_model(llm, text): 
+    prompt_data = json.loads(SYSTEM_PROMPT_PATH.read_text(encoding="utf-8"))
+    system_prompt = json.dumps(prompt_data, ensure_ascii=False, indent=2)
+
     response = llm.create_chat_completion(
         messages=[
             {
                 "role": "system",
-                "content": "Seu nome é Art, uma abrevicão para ArtBot. Você é um assistente pessoal que responde as perguntas das pessoas de forma concisa e objetiva. Seja amigável e responda o mais correto possível não gere caracteres especiais a não ser aqueles que dão sentido para uma frase, ou seja, se você fizer uma pergunta você  precisa colocar um ponto de interrogação, ou exclamação, tudo depende do contexto, entretanto não gere emojis e caracteres que não tenham relação com sua resposta.",
+                "content": system_prompt,
             },
             {
                 "role": "user",

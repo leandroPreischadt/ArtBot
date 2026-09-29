@@ -1,5 +1,5 @@
 from artbot.config.paths import MODELS_DIR
-from artbot.config.settings import DEVICE, MODEL_NAME
+from artbot.config.settings import AUDIO_DEVICE, DEVICE, MODEL_NAME
 from artbot.config.models.stt import whisper_model
 from artbot.config.models.stt import *
 from artbot.config.models.llm import *
@@ -14,6 +14,7 @@ MODEL_PATH = MODELS_DIR / MODEL_NAME
 def main() -> None:
     print(f"MODEL: {MODEL_PATH}")
     print(f"DEVICE: {DEVICE}")
+    print(f"AUDIO_DEVICE: {AUDIO_DEVICE}")
     
     """Loading models"""
     loaded_stt_model = load_stt_model()
