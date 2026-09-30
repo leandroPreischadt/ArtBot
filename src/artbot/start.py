@@ -1,4 +1,4 @@
-"""Sobe a face e a voz do ArtBot juntos.
+"""Sobe a face e o serviço principal do ArtBot juntos.
 
 Uso: uv run artbot-start
 Ctrl+C (ou fechar qualquer um dos dois) encerra ambos.
@@ -10,7 +10,9 @@ import time
 
 import requests
 
-FACE_STATE_URL = "http://127.0.0.1:8000/state"
+from artbot.config.settings import HTTP_PORT
+
+FACE_STATE_URL = f"http://127.0.0.1:{HTTP_PORT}/state"
 
 
 def wait_for_face(timeout: float = 15) -> bool:
@@ -29,9 +31,9 @@ def main() -> None:
     face = subprocess.Popen([sys.executable, "-m", "artbot.face.main"])
 
     if wait_for_face():
-        print("Face pronta. Iniciando a voz...")
+        print("Face pronta. Iniciando o ArtBot...")
     else:
-        print("Face nao respondeu a tempo. Iniciando a voz mesmo assim...")
+        print("Face nao respondeu a tempo. Iniciando o ArtBot mesmo assim...")
 
     voice = subprocess.Popen([sys.executable, "-m", "artbot.main"])
 

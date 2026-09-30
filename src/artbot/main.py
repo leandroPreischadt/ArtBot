@@ -1,11 +1,8 @@
 from artbot.config.vector_database import getContext, populate_vector_database
 from artbot.config.paths import MODELS_DIR
 from artbot.config.settings import AUDIO_DEVICE, DEVICE, MODEL_NAME
-from artbot.config.models.stt import whisper_model
-from artbot.config.models.stt import *
 from artbot.config.models.llm import *
 from artbot.config.models.tts import load_piper_model, piper_model
-from artbot.config.models.wakeword.detector import *
 from artbot.face.state import FaceState
 from artbot.face_service import face_service
 
@@ -18,22 +15,24 @@ def main() -> None:
     print(f"AUDIO_DEVICE: {AUDIO_DEVICE}")
     
     """Loading models"""
-    loaded_stt_model = load_stt_model()
     loaded_llm_model = load_llm_model()
     loaded_tts_model = load_piper_model()
-    wakeword = WakeWordDetector()
     populate_vector_database()
 
 
     """Executing programm"""
     while True:
-        
-        wakeword.listen()
-        
-        print("Wake word detected")
+        try:
+            my_text = input("\nDigite sua pergunta (ou Ctrl+C para sair): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nArtBot encerrado.")
+            break
+
+        if not my_text:
+            print("Digite uma pergunta para continuar.")
+            continue
 
         face_service.set_state(FaceState.THINKING)
-        my_text = whisper_model(loaded_stt_model)
 
         context = getContext(my_text)
 

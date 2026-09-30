@@ -1,11 +1,15 @@
 from faster_whisper import WhisperModel
+import ctranslate2
 from artbot.config.settings import (
     DEVICE,
     AUDIO_DEVICE,
     VAD_AGGRESSIVENESS,
     START_FRAMES,
     END_SILENCE_FRAMES,
-    NUMBER_OF_CHANNELS
+    NUMBER_OF_CHANNELS,
+    STT_BEAM_SIZE,
+    STT_LANGUAGE,
+    STT_MODEL_SIZE,
 )
 import sounddevice as sd
 import numpy as np
@@ -26,16 +30,30 @@ FRAME_SAMPLES_AI = int(SAMPLE_RATE_AI * FRAME_MS / 1000) # 480 amostras
 audio_queue = queue.Queue()
 
 def load_stt_model():
-    """Models vars"""
-    model_size = "small"
-    device_type = DEVICE
-    compute_type = "int8_float16" if device_type == "cuda" else "int8"
-    
-    """initiating model"""
-    # Corrigido para habilitar a GPU (Jetson)
-    model = WhisperModel(model_size, device="cpu", compute_type=compute_type)
-    
-    return model
+    requested_cuda = DEVICE == "cuda"
+    try:
+        cuda_compute_types = ctranslate2.get_supported_compute_types("cuda")
+    except (RuntimeError, ValueError):
+        cuda_compute_types = set()
+
+    if requested_cuda and cuda_compute_types:
+        device_type = "cuda"
+        compute_type = "int8_float16" if "int8_float16" in cuda_compute_types else "float16"
+    else:
+        device_type = "cpu"
+        compute_type = "int8"
+        if requested_cuda:
+            print(
+                "STT: CTranslate2 sem suporte CUDA neste ambiente; "
+                "usando CPU. Instale uma build CTranslate2 CUDA para acelerar o Whisper."
+            )
+
+    print(f"STT backend: {device_type} | compute_type={compute_type}")
+    return WhisperModel(
+        STT_MODEL_SIZE,
+        device=device_type,
+        compute_type=compute_type,
+    )
 
 def audio_callback(indata, frames, time_info, status):
     if status:
@@ -116,7 +134,13 @@ def record_until_silence():
 def whisper_model(model): 
     audio = record_until_silence()
     
-    segments, info = model.transcribe(audio, beam_size=5, vad_filter=False)
+    segments, info = model.transcribe(
+        audio,
+        language=STT_LANGUAGE,
+        beam_size=STT_BEAM_SIZE,
+        vad_filter=False,
+        condition_on_previous_text=False,
+    )
             
     text = "".join(segment.text for segment in segments).strip()
 
