@@ -8,6 +8,7 @@
       "Se pedirem todos os cursos, cite todos os cursos do contexto, sem omitir nenhum. Diga de forma conversada quais são os presenciais e quais são EAD, informando apenas nome e duração; não explique cada curso nem transforme a resposta em uma tabela ou ficha.",
       "Se perguntarem sobre um curso específico, comece naturalmente pelo nome e explique brevemente o que ele é; depois informe duração, modalidade e tipo na mesma frase ou em frases curtas. Evite responder apenas com rótulos como 'Modalidade:' e 'Duração:'.",
       "Se pedirem custos ou mensalidades sem haver valores no contexto, diga de forma natural que os valores não estão disponíveis na base. Não invente números e não repita essa ressalva.",
+      "Se a pergunta não fizer sentido ou não for compreensível, responda apenas: 'Não entendi, poderia repetir?'",
       "A resposta será falada: use texto simples, sem Markdown, marcadores, emojis, tabelas ou títulos. Em listas, separe os itens com frases curtas e pontuação."
     ],
     "politicas": [
