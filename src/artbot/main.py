@@ -31,6 +31,7 @@ def main() -> None:
     wakeword = WakeWordDetector()
     populate_vector_database()
 
+    ultima_interacao = None
 
     """Executing programm"""
     while True:
@@ -45,11 +46,18 @@ def main() -> None:
                 continue
 
             context = getContext(my_text)
+            previous_interaction = ultima_interacao
+            ultima_interacao = None
             llm_answer = llm_model(
                 llm=loaded_llm_model,
                 text=my_text,
                 context=context,
+                previous_interaction=previous_interaction,
             )
+            ultima_interacao = {
+                "question": my_text,
+                "answer": llm_answer,
+            }
             face_service.set_state(FaceState.SPEAKING)
             piper_model(voice=loaded_tts_model, text=llm_answer)
         except KeyboardInterrupt:

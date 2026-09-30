@@ -54,23 +54,36 @@ def load_llm_model():
     return Llama(**kwargs)
 
 
-def llm_model(llm, text, context):
+def llm_model(llm, text, context, previous_interaction=None):
     if isinstance(context, list):
         context = "\n".join(context)
 
     max_tokens = _response_token_limit(text)
+    messages = [
+        {
+            "role": "system",
+            "content": render_system_prompt(context),
+        },
+    ]
+
+    if previous_interaction:
+        messages.extend(
+            [
+                {
+                    "role": "user",
+                    "content": previous_interaction["question"],
+                },
+                {
+                    "role": "assistant",
+                    "content": previous_interaction["answer"],
+                },
+            ]
+        )
+
+    messages.append({"role": "user", "content": text})
 
     response = llm.create_chat_completion(
-        messages=[
-            {
-                "role": "system",
-                "content": render_system_prompt(context),
-            },
-            {
-                "role": "user",
-                "content": text,
-            },
-        ],
+        messages=messages,
         max_tokens=max_tokens,
     )
 
