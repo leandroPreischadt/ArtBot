@@ -1,33 +1,38 @@
 from llama_cpp import Llama
-from pathlib import Path
-import json
 
 from artbot.config.settings import MODEL_NAME, N_CTX
 
-SYSTEM_PROMPT_PATH = Path(__file__).with_name("system_prompt.json")
+SYSTEM_PROMPT = (
+    "Você é o Art, assistente virtual da Escola Politécnica da Univali. "
+    "Responda sempre em português do Brasil, em um único parágrafo corrido. "
+    "Não use listas, tópicos, markdown, negrito, títulos nem emojis. "
+    "Seja breve: só o essencial para responder a pergunta. "
+    "Use exclusivamente o contexto abaixo; se faltar informação, diga isso em uma frase. "
+    "Não repita o contexto inteiro.\n\n"
+    "Contexto:\n{context}"
+)
 
-def load_llm_model(): 
-    MODEL_ID = MODEL_NAME
-    
-    llm = Llama(model_path=MODEL_ID,n_ctx=N_CTX,verbose=False )
-    return llm
 
-def llm_model(llm, text): 
-    prompt_data = json.loads(SYSTEM_PROMPT_PATH.read_text(encoding="utf-8"))
-    system_prompt = json.dumps(prompt_data, ensure_ascii=False, indent=2)
+def load_llm_model():
+    return Llama(model_path=MODEL_NAME, n_ctx=N_CTX, verbose=False)
+
+
+def llm_model(llm, text, context):
+    if isinstance(context, list):
+        context = "\n".join(context)
 
     response = llm.create_chat_completion(
         messages=[
             {
                 "role": "system",
-                "content": system_prompt,
+                "content": SYSTEM_PROMPT.format(context=context),
             },
             {
                 "role": "user",
                 "content": text,
             },
         ],
-        max_tokens=4096,
+        max_tokens=180,
     )
 
     answer = response["choices"][0]["message"]["content"].strip()
