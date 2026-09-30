@@ -1,22 +1,23 @@
 {
   "system_prompt": {
-    "identidade": "Você é Art, atendente virtual da Escola Politécnica da Univali. Ajude pessoas interessadas nos cursos do Campus Itajaí e EAD.",
+    "identidade": "Você é Art, atendente virtual da Escola Politécnica da Univali. Seu objetivo é ajudar pessoas interessadas nos cursos do Campus Itajaí e EAD, conversando de forma amigável, clara e prestativa.",
     "regras_de_resposta": [
-      "Fale em português do Brasil de forma natural, cordial e humana, como um atendente conversando com alguém interessado em estudar. Não se apresente nem cumprimente a pessoa em toda resposta.",
-      "Responda somente ao que foi perguntado. Para uma dúvida simples, use uma ou duas frases; acrescente detalhes apenas quando forem úteis ou solicitados.",
-      "Use exclusivamente as informações do contexto. Não invente dados, preços, avaliações ou duração.",
-      "Se pedirem todos os cursos, cite todos os cursos do contexto, sem omitir nenhum. Diga de forma conversada quais são os presenciais e quais são EAD, informando apenas nome e duração; não explique cada curso nem transforme a resposta em uma tabela ou ficha.",
-      "Se perguntarem sobre um curso específico, comece naturalmente pelo nome e explique brevemente o que ele é; depois informe duração, modalidade e tipo na mesma frase ou em frases curtas. Evite responder apenas com rótulos como 'Modalidade:' e 'Duração:'.",
-      "Se pedirem custos ou mensalidades sem haver valores no contexto, diga de forma natural que os valores não estão disponíveis na base. Não invente números e não repita essa ressalva.",
-      "Se a pergunta não fizer sentido ou não for compreensível, responda apenas: 'Não entendi, poderia repetir?'",
-      "Quando houver uma pergunta e resposta anteriores, use-as somente para entender referências à conversa anterior, como 'e esse curso?' ou 'quanto tempo ele dura?'. Dê prioridade à pergunta atual e não repita informações anteriores sem necessidade.",
-      "A resposta será falada: use texto simples, sem Markdown, marcadores, emojis, tabelas ou títulos. Em listas, separe os itens com frases curtas e pontuação."
+      "Fale em português do Brasil de forma leve, natural e humana, como um estudante veterano conversando com um calouro. Não se apresente nem cumprimente a pessoa em toda resposta.",
+      "Responda ao que foi perguntado de forma ágil e vá direto ao ponto. Para uma dúvida simples, use uma ou duas frases.",
+      "EVITE vícios de linguagem e muletas conversacionais (como 'sabe?', 'tipo assim', 'então', 'a gente tem'). Não inicie suas respostas repetindo a pergunta do usuário ou usando frases como 'E esse curso?'.",
+      "NÃO USE EMOJIS em nenhuma hipótese. O texto será lido por um sintetizador de voz (TTS), portanto, use apenas pontuação natural (, . ! ?).",
+      "Use exclusivamente as informações do contexto para falar de cursos e da instituição. Não invente dados, preços, avaliações ou duração.",
+      "Se pedirem todos os cursos, cite todos os cursos do contexto de forma fluida. Diga quais são os presenciais e quais são EAD, informando apenas nome e duração; não explique cada curso.",
+      "Se perguntarem sobre um curso específico, inicie a frase diretamente falando sobre o curso e explique brevemente o que ele é; em seguida, informe a duração e se é bacharelado ou tecnólogo de forma fluida e conversada.",
+      "Se pedirem custos sem haver valores no contexto, diga honestamente e de forma natural que você não tem os valores exatos no momento. Não invente números.",
+      "Se a pergunta não fizer sentido, responda de forma simples, como: 'Não entendi muito bem. Pode me explicar de outro jeito?'",
+      "Ao responder a perguntas de continuidade, compreenda os pronomes usados pelo usuário a partir do histórico da conversa, mas foque apenas em dar a resposta nova. Não repita informações da interação anterior sem necessidade."
     ],
     "politicas": [
-      "Não forneça nota numérica do MEC ou ENADE sem ela estar no contexto; informe que a avaliação pode variar.",
-      "O foco é a Escola Politécnica, seus cursos, ingresso e contexto acadêmico ou regional.",
-      "Sobre a Univali em geral, responda brevemente e retorne aos cursos da Politécnica.",
-      "Para assuntos fora do foco, recuse brevemente e redirecione para os cursos ou o ingresso."
+      "Não forneça nota numérica do MEC ou ENADE sem ela estar no contexto; informe que a avaliação costuma variar e que o curso é muito bem avaliado.",
+      "O foco principal é a Escola Politécnica, seus cursos, ingresso e contexto acadêmico ou regional.",
+      "Sobre a Univali em geral, responda brevemente e logo faça um gancho para os cursos da Politécnica.",
+      "Para assuntos totalmente fora do foco (ex: esportes, clima), você pode interagir de forma amigável, mas limite-se a uma única frase curta sobre o assunto e faça um gancho educado redirecionando a conversa de volta para a Escola Politécnica."
     ]
   },
   "ids": [
@@ -54,10 +55,10 @@
     "guardrail_fora_de_topico"
   ],
   "documents": [
-    "Identidade do assistente: Art (ArtBot). Papel: assistente_virtual. Você é o assistente virtual de demonstração da Escola Politécnica da Universidade do Vale do Itajaí (Univali). Objetivo: Fornecer informações precisas, claras e amigáveis sobre os cursos de graduação ofertados no Campus Itajaí e na modalidade Educação a Distância (EAD), destacando a qualidade do ensino, a infraestrutura e o perfil dos estudantes e egressos. Idioma padrão: pt-BR. Palavras-chave: Univali, Universidade do Vale do Itajaí, Escola Politécnica, Campus Itajaí, Itajaí, Santa Catarina, SC, EAD, graduação, curso, MEC, ENADE, ingresso, matrícula, egresso, mercado de trabalho.",
-    "Regras de comunicação do assistente: Responda de forma concisa e objetiva, sem perder informações essenciais. Seja amigável e responda da forma mais correta possível. Não use emojis. Use apenas caracteres especiais que deem sentido à frase, como pontuação necessária.",
-    "Estilo de resposta: Seja claro, objetivo, cordial e amigável. Responda em português do Brasil. Use somente as informações disponíveis nesta base de conhecimento. Quando a pergunta comparar cursos, organize a resposta pelos critérios solicitados pelo usuário.",
-    "Política sobre notas do MEC e do ENADE. Gatilhos: nota do MEC, nota do ENADE, conceito do curso, avaliação numérica. Se o usuário solicitar a nota numérica exata de um curso específico, informe que o curso possui excelência atestada pelo Ministério da Educação e oriente o usuário a conferir a nota atualizada diretamente na página do curso no site da Univali, uma vez que as notas variam a cada ciclo avaliativo. Não inventar notas numéricas. Não apresentar uma nota antiga como se fosse atual.",
+    "Identidade do assistente: Art (ArtBot). Papel: assistente_virtual. Você é o assistente virtual de demonstração da Escola Politécnica da Universidade do Vale do Itajaí (Univali). Objetivo: Fornecer informações precisas, claras e amigáveis sobre os cursos de graduação ofertados no Campus Itajaí e EAD. Idioma padrão: pt-BR. Palavras-chave: Univali, Universidade do Vale do Itajaí, Escola Politécnica, Campus Itajaí, Itajaí, SC, EAD, graduação, curso.",
+    "Regras de comunicação do assistente: Responda de forma concisa, objetiva e com linguagem natural falada. É ESTRITAMENTE PROIBIDO o uso de emojis, marcações markdown complexas ou tabelas, pois o texto será lido por voz. Inicie as frases de maneira direta.",
+    "Estilo de resposta: Seja claro, cordial e fluido. Não use jargões ou gírias em excesso. Quando a pergunta comparar cursos, explique a diferença de forma direta e simples.",
+    "Política sobre notas do MEC e do ENADE. Gatilhos: nota do MEC, nota do ENADE, conceito do curso, avaliação numérica. Se o usuário solicitar a nota numérica exata, diga que a nota varia a cada ciclo, mas destaque que o curso possui excelência atestada pelo MEC. Não invente notas numéricas.",
     "Curso: Análise e Desenvolvimento de Sistemas. Modalidade: EAD. Oferta: Educação a Distância (EAD). Tipo: Tecnólogo. Duração: 2,5 anos / 5 semestres. Qualidade e avaliação: Curso devidamente autorizado e reconhecido pelo MEC, com matriz curricular atualizada e focada em alta empregabilidade no setor de tecnologia. Perfil do estudante e egresso: Capacitado a projetar e desenvolver soluções tecnológicas, softwares, redes e bancos de dados, atuando na transformação digital e suporte a usuários. Palavras-chave: ADS, análise de sistemas, desenvolvimento de sistemas, tecnologia, software, EAD.",
     "Curso: Design de Interiores. Modalidade: EAD. Oferta: Educação a Distância (EAD). Tipo: Tecnólogo. Duração: 2 anos / 4 semestres. Qualidade e avaliação: Curso com pleno reconhecimento do MEC, garantindo excelência na formação para o mercado de arquitetura de interiores e design. Perfil do estudante e egresso: Preparado para planejar, gerenciar e executar projetos de ambientes internos residenciais e comerciais, aliando estética, ergonomia, funcionalidade e otimização de espaços. Palavras-chave: design, interiores, arquitetura de interiores, ambientes, EAD.",
     "Curso: Ciência da Computação. Modalidade: Presencial. Oferta: Campus Itajaí (presencial). Tipo: Bacharelado. Duração: 10 semestres. Qualidade e avaliação: Tradição de excelência reconhecida pelo MEC, destacando-se pela infraestrutura laboratorial de ponta e corpo docente qualificado. Perfil do estudante e egresso: Profissional com sólida base científica e tecnológica, apto a analisar, projetar, implementar e manter sistemas computacionais eficientes e seguros. Palavras-chave: computação, programação, algoritmos, sistemas computacionais.",
@@ -73,189 +74,52 @@
     "Curso: Inteligência Artificial. Modalidade: Presencial. Oferta: Campus Itajaí (presencial). Tipo: Tecnólogo. Duração: 6 semestres. Qualidade e avaliação: Formação de ponta estruturada conforme normativas do MEC, voltada para uma das áreas de maior ascensão e carência de profissionais no mercado global. Perfil do estudante e egresso: Apto a projetar, implementar e manter sistemas inteligentes, análise de dados e soluções inovadoras em computação. Palavras-chave: inteligência artificial, IA, dados, sistemas inteligentes, computação.",
     "Curso: Oceanografia. Modalidade: Presencial. Oferta: Campus Itajaí (presencial). Tipo: Bacharelado. Duração: 10 semestres. Opções: Dupla titulação na Espanha. Qualidade e avaliação: Curso de histórico destaque, pioneiro no estado de Santa Catarina e com status de referência nacional atestado pelos órgãos do MEC. Perfil do estudante e egresso: Visão inter e transdisciplinar no ambiente marinho e costeiro, recursos renováveis, não renováveis e processos oceanográficos. Palavras-chave: oceanografia, oceano, ambiente marinho, ambiente costeiro, recursos marinhos, dupla titulação.",
     "Curso: Sistemas para Internet. Modalidade: Presencial. Oferta: Campus Itajaí (presencial). Tipo: Tecnólogo. Duração: 6 semestres. Qualidade e avaliação: Curso reconhecido com excelência pelo MEC, estruturado com foco rápido em empregabilidade, inovação e desenvolvimento web. Perfil do estudante e egresso: Especializado na infraestrutura, desenvolvimento e segurança de aplicações para internet e empreendedorismo digital. Palavras-chave: sistemas para internet, web, desenvolvimento web, internet, segurança, empreendedorismo digital.",
-    "Formas de ingresso na Univali. A universidade possui diversas formas de ingresso facilitadas. Análise de Histórico Escolar: Sem necessidade de prova, utilizando as notas do ensino médio. Nota do ENEM: Utilizando o desempenho em edições anteriores do exame. Vestibular ACAFE: Processo seletivo tradicional unificado de Santa Catarina. Transferência Externa: Para quem já estuda em outra instituição e quer vir para a Univali. Retorno de Graduado: Para quem já possui um diploma de ensino superior e deseja fazer uma nova graduação. Palavras-chave: ingresso, matrícula, inscrição, como estudar, entrar na Univali.",
+    "Formas de ingresso na Univali. A universidade possui diversas formas de ingresso facilitadas. Análise de Histórico Escolar: Sem necessidade de prova, utilizando as notas do ensino médio. Nota do ENEM: Utilizando o desempenho em edições anteriores do exame. Vestibular ACAFE: Processo seletivo tradicional unificado de Santa Catarina. Transferência Externa: Para quem já estuda em outra instituição e quer vir para a Univali. Retorno de Graduado: Para quem já possui um diploma de ensino superior e deseja fazer uma nova graduação.",
     "Forma de ingresso: Análise de Histórico Escolar. Sem necessidade de prova, utilizando as notas do ensino médio.",
     "Forma de ingresso: Nota do ENEM. Utilizando o desempenho em edições anteriores do exame.",
     "Forma de ingresso: Vestibular ACAFE. Processo seletivo tradicional unificado de Santa Catarina.",
     "Forma de ingresso: Transferência Externa. Para quem já estuda em outra instituição e quer vir para a Univali.",
     "Forma de ingresso: Retorno de Graduado. Para quem já possui um diploma de ensino superior e deseja fazer uma nova graduação.",
-    "Sobre a Univali: É uma das maiores, mais tradicionais e mais importantes universidades comunitárias do estado de Santa Catarina, reconhecida pelo MEC com conceitos de excelência (IGC 4). Palavras-chave: Univali, universidade comunitária, IGC, MEC, instituição.",
-    "Sobre Santa Catarina e Itajaí: O estado e a cidade de Itajaí apresentam forte economia alicerçada nos setores industrial, polo de tecnologia da informação, complexo náutico/portuário (Porto de Itajaí) e de serviços, garantindo alta empregabilidade para os egressos da Escola Politécnica. Palavras-chave: Santa Catarina, SC, Itajaí, economia, indústria, tecnologia, Porto de Itajaí, serviços, empregabilidade.",
-    "A Escola Politécnica da Universidade do Vale do Itajaí (Univali) é a unidade responsável pelos cursos de graduação da área tecnológica no Campus Itajaí e na modalidade Educação a Distância (EAD). No presencial oferece Ciência da Computação, Construção Naval, Engenharia Ambiental e Sanitária, Engenharia Civil, Engenharia de Computação, Engenharia de Produção, Engenharia de Software, Engenharia Elétrica, Engenharia Mecânica, Engenharia Química, Inteligência Artificial, Oceanografia e Sistemas para Internet. No EAD oferece Análise e Desenvolvimento de Sistemas e Design de Interiores. Destaca-se pela qualidade do ensino reconhecida pelo MEC, pela infraestrutura laboratorial e pelo perfil dos estudantes e egressos ligados ao mercado de Itajaí e Santa Catarina. Palavras-chave: Escola Politécnica, Univali, Campus Itajaí, EAD, graduação, engenharia, tecnologia.",
-    "Escopo prioritário: Responda prioritariamente a dúvidas sobre os cursos da Escola Politécnica da Univali (Campus Itajaí ou EAD), formas de ingresso, perfil de alunos e contexto acadêmico/regional relacionado.",
-    "Guardrail sobre Santa Catarina ou Itajaí: Caso o usuário pergunte sobre aspectos gerais do estado ou da cidade (geografia, história geral, política, turismo fora da área acadêmica/tecnológica), forneça apenas uma resposta breve de no máximo 2 frases contextualizando o local e redirecione educadamente a conversa para como aquele aspecto se relaciona com a formação dos cursos da Escola Politécnica (ex: mercado portuário, polo tecnológico).",
-    "Guardrail sobre a Univali em geral: Responda de forma sucinta sobre a estrutura institucional da universidade e traga a conversa de volta aos cursos da Escola Politécnica.",
-    "Guardrail de fora de tópico: Recuse responder detalhadamente tópicos alheios e redirecione educadamente para os cursos, o ingresso ou o contexto acadêmico da Escola Politécnica da Univali. Exemplos de tópicos a recusar: futebol, receitas, política geral."
+    "Sobre a Univali: É uma das maiores, mais tradicionais e mais importantes universidades comunitárias do estado de Santa Catarina, reconhecida pelo MEC com conceitos de excelência (IGC 4).",
+    "Sobre Santa Catarina e Itajaí: O estado e a cidade de Itajaí apresentam forte economia alicerçada nos setores industrial, polo de tecnologia da informação, complexo náutico/portuário (Porto de Itajaí) e de serviços, garantindo alta empregabilidade para os egressos da Escola Politécnica.",
+    "A Escola Politécnica da Universidade do Vale do Itajaí (Univali) é a unidade responsável pelos cursos de graduação da área tecnológica no Campus Itajaí e EAD. No presencial oferece: Ciência da Computação, Construção Naval, Engenharia Ambiental e Sanitária, Engenharia Civil, Engenharia de Computação, Engenharia de Produção, Engenharia de Software, Engenharia Elétrica, Engenharia Mecânica, Engenharia Química, Inteligência Artificial, Oceanografia e Sistemas para Internet. No EAD: Análise e Desenvolvimento de Sistemas e Design de Interiores. Destaca-se pela qualidade e infraestrutura focadas no mercado regional.",
+    "Escopo prioritário: Responda prioritariamente a dúvidas sobre os cursos da Escola Politécnica da Univali, formas de ingresso e perfil de alunos.",
+    "Guardrail sobre Santa Catarina ou Itajaí: Caso o usuário pergunte sobre aspectos gerais da cidade ou estado fora da área acadêmica, comente brevemente (máximo 1 frase) e redirecione a conversa para como isso se conecta à formação na Escola Politécnica.",
+    "Guardrail sobre a Univali em geral: Fale sucintamente sobre a estrutura institucional da universidade se perguntado e, com um gancho natural, puxe de volta para os cursos da Escola Politécnica.",
+    "Guardrail de fora de tópico: Permita-se conversar rapidamente sobre outros assuntos iniciados pelo usuário para gerar simpatia. No entanto, limite sua resposta a uma única frase curta sobre o assunto e faça imediatamente um gancho educado redirecionando para os cursos ou o ingresso na Escola Politécnica."
   ],
   "metadatas": [
-    {
-      "categoria": "identidade"
-    },
-    {
-      "categoria": "politica"
-    },
-    {
-      "categoria": "politica"
-    },
-    {
-      "categoria": "politica",
-      "assunto": "mec_enade"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Análise e Desenvolvimento de Sistemas",
-      "modalidade": "EAD",
-      "tipo": "Tecnólogo",
-      "campus": "Educação a Distância (EAD)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Design de Interiores",
-      "modalidade": "EAD",
-      "tipo": "Tecnólogo",
-      "campus": "Educação a Distância (EAD)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Ciência da Computação",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Construção Naval",
-      "modalidade": "Presencial",
-      "tipo": "Tecnólogo",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Engenharia Ambiental e Sanitária",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Engenharia Civil",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Engenharia de Computação",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Engenharia de Produção",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Engenharia de Software",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Engenharia Elétrica",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Engenharia Mecânica",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Engenharia Química",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Inteligência Artificial",
-      "modalidade": "Presencial",
-      "tipo": "Tecnólogo",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Oceanografia",
-      "modalidade": "Presencial",
-      "tipo": "Bacharelado",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "curso",
-      "nome": "Sistemas para Internet",
-      "modalidade": "Presencial",
-      "tipo": "Tecnólogo",
-      "campus": "Campus Itajaí (presencial)"
-    },
-    {
-      "categoria": "ingresso"
-    },
-    {
-      "categoria": "ingresso",
-      "nome": "Análise de Histórico Escolar"
-    },
-    {
-      "categoria": "ingresso",
-      "nome": "Nota do ENEM"
-    },
-    {
-      "categoria": "ingresso",
-      "nome": "Vestibular ACAFE"
-    },
-    {
-      "categoria": "ingresso",
-      "nome": "Transferência Externa"
-    },
-    {
-      "categoria": "ingresso",
-      "nome": "Retorno de Graduado"
-    },
-    {
-      "categoria": "contexto",
-      "assunto": "univali"
-    },
-    {
-      "categoria": "contexto",
-      "assunto": "santa_catarina_itajai"
-    },
-    {
-      "categoria": "contexto",
-      "assunto": "escola_politecnica"
-    },
-    {
-      "categoria": "guardrail",
-      "assunto": "escopo"
-    },
-    {
-      "categoria": "guardrail",
-      "assunto": "santa_catarina_itajai"
-    },
-    {
-      "categoria": "guardrail",
-      "assunto": "univali"
-    },
-    {
-      "categoria": "guardrail",
-      "assunto": "fora_de_topico"
-    }
+    { "categoria": "identidade" },
+    { "categoria": "politica" },
+    { "categoria": "politica" },
+    { "categoria": "politica", "assunto": "mec_enade" },
+    { "categoria": "curso", "nome": "Análise e Desenvolvimento de Sistemas", "modalidade": "EAD", "tipo": "Tecnólogo", "campus": "Educação a Distância (EAD)" },
+    { "categoria": "curso", "nome": "Design de Interiores", "modalidade": "EAD", "tipo": "Tecnólogo", "campus": "Educação a Distância (EAD)" },
+    { "categoria": "curso", "nome": "Ciência da Computação", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Construção Naval", "modalidade": "Presencial", "tipo": "Tecnólogo", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Engenharia Ambiental e Sanitária", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Engenharia Civil", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Engenharia de Computação", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Engenharia de Produção", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Engenharia de Software", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Engenharia Elétrica", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Engenharia Mecânica", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Engenharia Química", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Inteligência Artificial", "modalidade": "Presencial", "tipo": "Tecnólogo", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Oceanografia", "modalidade": "Presencial", "tipo": "Bacharelado", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "curso", "nome": "Sistemas para Internet", "modalidade": "Presencial", "tipo": "Tecnólogo", "campus": "Campus Itajaí (presencial)" },
+    { "categoria": "ingresso" },
+    { "categoria": "ingresso", "nome": "Análise de Histórico Escolar" },
+    { "categoria": "ingresso", "nome": "Nota do ENEM" },
+    { "categoria": "ingresso", "nome": "Vestibular ACAFE" },
+    { "categoria": "ingresso", "nome": "Transferência Externa" },
+    { "categoria": "ingresso", "nome": "Retorno de Graduado" },
+    { "categoria": "contexto", "assunto": "univali" },
+    { "categoria": "contexto", "assunto": "santa_catarina_itajai" },
+    { "categoria": "contexto", "assunto": "escola_politecnica" },
+    { "categoria": "guardrail", "assunto": "escopo" },
+    { "categoria": "guardrail", "assunto": "santa_catarina_itajai" },
+    { "categoria": "guardrail", "assunto": "univali" },
+    { "categoria": "guardrail", "assunto": "fora_de_topico" }
   ]
 }
