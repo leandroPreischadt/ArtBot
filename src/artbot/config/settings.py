@@ -13,9 +13,14 @@ MODEL_NAME = os.getenv("MODEL_NAME", "")
 TTS_MODEL_NAME = os.getenv("TTS_MODEL_NAME", "")
 N_CTX = int(os.getenv("N_CTX", ""))
 
-# O PortAudio enxerga o DJI Mic Mini através do nó PipeWire.  Na Jetson,
-# ``default`` aponta para a entrada APE e não para o microfone USB.
-AUDIO_DEVICE = os.getenv("AUDIO_DEVICE", "pipewire")
+# O PortAudio usa ``None`` para o dispositivo padrão do sistema.  ``default``
+# é um alias útil no .env, mas não é necessariamente um nome de dispositivo
+# válido no macOS.
+_audio_device = os.getenv("AUDIO_DEVICE", "pipewire").strip()
+AUDIO_DEVICE = (
+    None if _audio_device.lower() in {"", "default", "system", "auto"}
+    else _audio_device
+)
 
 VAD_AGGRESSIVENESS = int(os.getenv("VAD_AGGRESSIVENESS", "1"))
 START_FRAMES = int(os.getenv("START_FRAMES", "3"))
