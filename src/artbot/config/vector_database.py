@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 
 import chromadb
 
@@ -11,11 +10,15 @@ colecao = chroma_client.get_or_create_collection(name="conhecimento_univali")
 
 
 def populate_vector_database():
-    if colecao.count() > 0:
+    knowledge = json.loads(KNOWLEDGE_PATH.read_text(encoding="utf-8"))
+    atuais = set(colecao.get()["ids"])
+    novos = set(knowledge["ids"])
+    if atuais == novos:
         return
 
     print("[STARTED] Populating vector")
-    knowledge = json.loads(KNOWLEDGE_PATH.read_text(encoding="utf-8"))
+    if atuais:
+        colecao.delete(ids=list(atuais))
     colecao.add(
         documents=knowledge["documents"],
         ids=knowledge["ids"],
@@ -25,7 +28,12 @@ def populate_vector_database():
 
 
 def getContext(prompt):
-    busca = colecao.query(query_texts=[prompt], include=["documents"])["documents"][0][0]  # type: ignore
-
-    print("Contexto utilizado: " + busca)
-    return busca
+    busca = colecao.query(
+        query_texts=[prompt],
+        n_results=1,
+        where={"categoria": {"$in": ["curso", "contexto", "ingresso"]}},
+        include=["documents"],
+    )["documents"][0] # type: ignore
+    contexto = "\n".join(busca)
+    print("Contexto utilizado: " + contexto)
+    return contexto

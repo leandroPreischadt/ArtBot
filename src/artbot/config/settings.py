@@ -27,4 +27,4 @@ HTTP_PORT = os.getenv("HTTP_PORT", "")
 _database_path = Path(os.getenv("DATABASE_PATH") or BASE_DIR / "data" / "chroma")
 DATABASE_PATH = str(_database_path if _database_path.is_absolute() else BASE_DIR / _database_path)
 
-KNOWLEDGE_PATH = Path(__file__).with_name("knowledge.json")
+KNOWLEDGE_PATH = BASE_DIR / "knowledge.json"

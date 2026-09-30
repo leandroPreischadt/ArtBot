@@ -27,6 +27,7 @@
     "ingresso_retorno_de_graduado",
     "contexto_univali",
     "contexto_santa_catarina_itajai",
+    "contexto_escola_politecnica",
     "guardrail_escopo",
     "guardrail_santa_catarina_itajai",
     "guardrail_univali_em_geral",
@@ -60,6 +61,7 @@
     "Forma de ingresso: Retorno de Graduado. Para quem já possui um diploma de ensino superior e deseja fazer uma nova graduação.",
     "Sobre a Univali: É uma das maiores, mais tradicionais e mais importantes universidades comunitárias do estado de Santa Catarina, reconhecida pelo MEC com conceitos de excelência (IGC 4). Palavras-chave: Univali, universidade comunitária, IGC, MEC, instituição.",
     "Sobre Santa Catarina e Itajaí: O estado e a cidade de Itajaí apresentam forte economia alicerçada nos setores industrial, polo de tecnologia da informação, complexo náutico/portuário (Porto de Itajaí) e de serviços, garantindo alta empregabilidade para os egressos da Escola Politécnica. Palavras-chave: Santa Catarina, SC, Itajaí, economia, indústria, tecnologia, Porto de Itajaí, serviços, empregabilidade.",
+    "A Escola Politécnica da Universidade do Vale do Itajaí (Univali) é a unidade responsável pelos cursos de graduação da área tecnológica no Campus Itajaí e na modalidade Educação a Distância (EAD). No presencial oferece Ciência da Computação, Construção Naval, Engenharia Ambiental e Sanitária, Engenharia Civil, Engenharia de Computação, Engenharia de Produção, Engenharia de Software, Engenharia Elétrica, Engenharia Mecânica, Engenharia Química, Inteligência Artificial, Oceanografia e Sistemas para Internet. No EAD oferece Análise e Desenvolvimento de Sistemas e Design de Interiores. Destaca-se pela qualidade do ensino reconhecida pelo MEC, pela infraestrutura laboratorial e pelo perfil dos estudantes e egressos ligados ao mercado de Itajaí e Santa Catarina. Palavras-chave: Escola Politécnica, Univali, Campus Itajaí, EAD, graduação, engenharia, tecnologia.",
     "Escopo prioritário: Responda prioritariamente a dúvidas sobre os cursos da Escola Politécnica da Univali (Campus Itajaí ou EAD), formas de ingresso, perfil de alunos e contexto acadêmico/regional relacionado.",
     "Guardrail sobre Santa Catarina ou Itajaí: Caso o usuário pergunte sobre aspectos gerais do estado ou da cidade (geografia, história geral, política, turismo fora da área acadêmica/tecnológica), forneça apenas uma resposta breve de no máximo 2 frases contextualizando o local e redirecione educadamente a conversa para como aquele aspecto se relaciona com a formação dos cursos da Escola Politécnica (ex: mercado portuário, polo tecnológico).",
     "Guardrail sobre a Univali em geral: Responda de forma sucinta sobre a estrutura institucional da universidade e traga a conversa de volta aos cursos da Escola Politécnica.",
@@ -214,6 +216,10 @@
     {
       "categoria": "contexto",
       "assunto": "santa_catarina_itajai"
+    },
+    {
+      "categoria": "contexto",
+      "assunto": "escola_politecnica"
     },
     {
       "categoria": "guardrail",
