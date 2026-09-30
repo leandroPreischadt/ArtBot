@@ -29,6 +29,13 @@ def _int_env(name: str, default: int) -> int:
     return default if value in {None, ""} else int(value)
 
 
+def _required_int_env(name: str) -> int:
+    value = os.getenv(name)
+    if value in {None, ""}:
+        raise ValueError(f"{name} deve ser definido em environment/.env")
+    return int(value)
+
+
 def _bool_env(name: str, default: bool) -> bool:
     value = os.getenv(name)
     if value in {None, ""}:
@@ -39,7 +46,13 @@ def _bool_env(name: str, default: bool) -> bool:
 # llama.cpp defaults to n_gpu_layers=0.  That default is the main reason a
 # CUDA-capable Jetson can still run the LLM entirely on the CPU.
 N_CTX = _int_env("N_CTX", 1024)
-MAX_TOKENS = _int_env("MAX_TOKENS", 3000)
+# O limite maior fica reservado para listas e comparações. O código escolhe um
+# limite menor para perguntas simples, evitando tanto respostas truncadas
+# quanto o tempo de geração de uma resposta longa em toda pergunta.
+MAX_TOKENS = _required_int_env("MAX_TOKENS")
+SIMPLE_MAX_TOKENS = _required_int_env("SIMPLE_MAX_TOKENS")
+LIST_MAX_TOKENS = _required_int_env("LIST_MAX_TOKENS")
+DETAIL_MAX_TOKENS = _required_int_env("DETAIL_MAX_TOKENS")
 N_GPU_LAYERS = _int_env("N_GPU_LAYERS", -1 if DEVICE == "cuda" else 0)
 # Small values are intentional: the Orin shares its 8 GB between CPU, GPU,
 # the desktop/face process, Whisper and llama.cpp. Larger batches increase
@@ -67,9 +80,9 @@ AUDIO_DEVICE = (
     else _audio_device
 )
 
-VAD_AGGRESSIVENESS = int(os.getenv("VAD_AGGRESSIVENESS", "1"))
+VAD_AGGRESSIVENESS = int(os.getenv("VAD_AGGRESSIVENESS", "2"))
 START_FRAMES = int(os.getenv("START_FRAMES", "3"))
-END_SILENCE_FRAMES = int(os.getenv("END_SILENCE_FRAMES", "40"))
+END_SILENCE_FRAMES = int(os.getenv("END_SILENCE_FRAMES", "80"))
 WAKEWORD_THRESHOLD = float(os.getenv("WAKEWORD_THRESHOLD", "0.5"))
 
 HTTP_PORT = _int_env("HTTP_PORT", 8383)
@@ -77,5 +90,4 @@ HTTP_PORT = _int_env("HTTP_PORT", 8383)
 _database_path = Path(os.getenv("DATABASE_PATH") or BASE_DIR / "data" / "chroma")
 DATABASE_PATH = str(_database_path if _database_path.is_absolute() else BASE_DIR / _database_path)
 
-KNOWLEDGE_PATH = BASE_DIR / "knowledge.json"
 NUMBER_OF_CHANNELS = int(os.getenv("NUMBER_OF_CHANNELS", "2"))

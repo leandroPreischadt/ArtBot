@@ -1,8 +1,11 @@
 from llama_cpp import Llama, llama_supports_gpu_offload
 
+from artbot.config.prompt import render_system_prompt
 from artbot.config.settings import (
     DEVICE,
+    DETAIL_MAX_TOKENS,
     FLASH_ATTN,
+    LIST_MAX_TOKENS,
     MAX_TOKENS,
     MODEL_NAME,
     N_BATCH,
@@ -12,20 +15,8 @@ from artbot.config.settings import (
     N_THREADS_BATCH,
     N_UBATCH,
     OFFLOAD_KQV,
+    SIMPLE_MAX_TOKENS,
 )
-
-SYSTEM_PROMPT = (
-    "Você é o Art, assistente virtual da Escola Politécnica da Univali. "
-    "Responda sempre em português do Brasil, em um único parágrafo corrido. "
-    "Não use listas, tópicos, markdown, negrito, títulos nem emojis. "
-    "Responda com extensão proporcional à pergunta e cubra todos os itens pedidos. "
-    "Quando o usuário pedir uma lista ou comparar vários itens, mencione cada item "
-    "e todas as informações solicitadas, sem omitir itens por tentar ser breve. "
-    "Use exclusivamente o contexto abaixo; se faltar informação, diga isso em uma frase. "
-    "Não repita o contexto inteiro.\n\n"
-    "Contexto:\n{context}"
-)
-
 
 def load_llm_model():
     if not MODEL_NAME:
@@ -67,20 +58,47 @@ def llm_model(llm, text, context):
     if isinstance(context, list):
         context = "\n".join(context)
 
+    max_tokens = _response_token_limit(text)
+
     response = llm.create_chat_completion(
         messages=[
             {
                 "role": "system",
-                "content": SYSTEM_PROMPT.format(context=context),
+                "content": render_system_prompt(context),
             },
             {
                 "role": "user",
                 "content": text,
             },
         ],
-        max_tokens=MAX_TOKENS,
+        max_tokens=max_tokens,
     )
 
     answer = response["choices"][0]["message"]["content"].strip()
     print(f"LLM: {answer}")
     return answer
+
+
+def _response_token_limit(text: str) -> int:
+    """Escolhe o limite conforme a amplitude pedida na pergunta."""
+    normalized = text.casefold()
+    list_request = any(
+        termo in normalized
+        for termo in ("quais", "lista", "todos", "todas", "cada", "formas de ingresso")
+    )
+    comparison_request = any(
+        termo in normalized
+        for termo in ("compare", "comparar", "comparação", "diferença", "diferenças")
+    )
+    detail_request = any(
+        termo in normalized
+        for termo in ("explique", "explica", "detalhe", "detalhes", "como funciona", "por que")
+    )
+
+    if comparison_request:
+        return min(MAX_TOKENS, max(LIST_MAX_TOKENS, DETAIL_MAX_TOKENS))
+    if list_request:
+        return min(MAX_TOKENS, LIST_MAX_TOKENS)
+    if detail_request:
+        return min(MAX_TOKENS, DETAIL_MAX_TOKENS)
+    return min(MAX_TOKENS, SIMPLE_MAX_TOKENS)
