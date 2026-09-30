@@ -33,3 +33,4 @@ _database_path = Path(os.getenv("DATABASE_PATH") or BASE_DIR / "data" / "chroma"
 DATABASE_PATH = str(_database_path if _database_path.is_absolute() else BASE_DIR / _database_path)
 
 KNOWLEDGE_PATH = BASE_DIR / "knowledge.json"
+NUMBER_OF_CHANNELS = int(os.getenv("NUMBER_OF_CHANNELS", "2"))

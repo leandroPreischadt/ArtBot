@@ -5,6 +5,7 @@ from artbot.config.settings import (
     VAD_AGGRESSIVENESS,
     START_FRAMES,
     END_SILENCE_FRAMES,
+    NUMBER_OF_CHANNELS
 )
 import sounddevice as sd
 import numpy as np
@@ -14,7 +15,7 @@ import webrtcvad
 
 # Variáveis do Hardware (DJI Mic)
 SAMPLE_RATE_HW = 48000     
-CHANNELS_HW = 2
+CHANNELS_HW = NUMBER_OF_CHANNELS
 FRAME_MS = 30
 FRAME_SAMPLES_HW = int(SAMPLE_RATE_HW * FRAME_MS / 1000) # 1440 amostras
 

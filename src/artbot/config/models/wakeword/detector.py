@@ -4,14 +4,33 @@ import openwakeword
 import sounddevice as sd
 from openwakeword.model import Model
 
-from artbot.config.settings import AUDIO_DEVICE, WAKEWORD_THRESHOLD
+from artbot.config.settings import AUDIO_DEVICE, WAKEWORD_THRESHOLD, NUMBER_OF_CHANNELS
 
 # Variáveis do Hardware (DJI Mic)
 SAMPLE_RATE_HW = 48000 
-CHANNELS_HW = 2
+CHANNELS_HW = NUMBER_OF_CHANNELS
 FRAME_SAMPLES_HW = 3840 # Equivalente a 1280 (exigido pelo OpenWakeWord) * 3
 
 audio_queue = queue.Queue()
+
+
+def _resolve_input_device():
+    """Resolve o microfone padrão sem depender do alias ``default``."""
+    if AUDIO_DEVICE is not None:
+        return AUDIO_DEVICE
+
+    default_input = sd.default.device[0]
+    if isinstance(default_input, int) and default_input >= 0:
+        return default_input
+
+    for index, device in enumerate(sd.query_devices()):
+        if int(device["max_input_channels"]) > 0:
+            return index
+
+    raise RuntimeError(
+        "Nenhum dispositivo de entrada foi encontrado. "
+        "Verifique a permissão de microfone do Terminal no macOS."
+    )
 
 def audio_callback(indata, frames, time_info, status):
     if status:
@@ -50,10 +69,16 @@ class WakeWordDetector:
 
         print("Waiting wake word...")
 
+        input_device = _resolve_input_device()
+        max_input_channels = int(
+            sd.query_devices(input_device)["max_input_channels"]
+        )
+        input_channels = min(CHANNELS_HW, max_input_channels)
+
         with sd.InputStream(
-            device=AUDIO_DEVICE,
+            device=input_device,
             samplerate=SAMPLE_RATE_HW,
-            channels=CHANNELS_HW,
+            channels=input_channels,
             dtype="int16",
             blocksize=FRAME_SAMPLES_HW, # Passando a variável de hardware correta
             callback=audio_callback,
