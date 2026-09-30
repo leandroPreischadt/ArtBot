@@ -23,7 +23,7 @@ class FaceService:
         if not HTTP_PORT:
             return
         try:
-            requests.put(f"http://localhost:{HTTP_PORT}/state/{self._state.name}", timeout=2)
+            requests.put(f"http://localhost:{HTTP_PORT}/state/{self._state.name}", timeout=0.5)
         except requests.RequestException as exc:
             print(f"FaceService: falha ao notificar estado '{self._state.name}': {exc}")
 

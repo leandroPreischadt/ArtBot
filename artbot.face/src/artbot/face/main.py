@@ -1,4 +1,5 @@
 import threading
+import logging
 from pathlib import Path
 
 import arcade
@@ -32,42 +33,43 @@ STATE_GIFS = {
 DEFAULT_GIF = {"eyes": "eyes-lookin-arround.gif", "mouth": "mouth-idle.gif"}
 
 _animation_cache: dict[Path, TextureAnimation] = {}
+logger = logging.getLogger(__name__)
 
 
 def load_gif_animation(path: Path) -> TextureAnimation:
     if path in _animation_cache:
         return _animation_cache[path]
 
-    image = Image.open(path)
-    logical_size = image.size
+    with Image.open(path) as image:
+        logical_size = image.size
 
-    keyframes: list[TextureKeyframe] = []
-    canvas = Image.new("RGBA", logical_size, (0, 0, 0, 0))
-    previous = canvas.copy()
+        keyframes: list[TextureKeyframe] = []
+        canvas = Image.new("RGBA", logical_size, (0, 0, 0, 0))
+        previous = canvas.copy()
 
-    for i in range(image.n_frames): # type: ignore
-        image.seek(i)
-        duration = image.info.get("duration", 100) or 100
-        disposal = getattr(image, "disposal_method", 1)
-        extents = image.tile[0][1] if image.tile else (0, 0, *logical_size)
+        for i in range(image.n_frames): # type: ignore
+            image.seek(i)
+            duration = image.info.get("duration", 100) or 100
+            disposal = getattr(image, "disposal_method", 1)
+            extents = image.tile[0][1] if image.tile else (0, 0, *logical_size)
 
-        if disposal == 3:
-            previous = canvas.copy()
+            if disposal == 3:
+                previous = canvas.copy()
 
-        frame = image.convert("RGBA")
-        # Full-size frames must paste at (0, 0); offsetting smears pixels.
-        if frame.size == logical_size:
-            canvas.paste(frame, (0, 0), frame)
-        else:
-            canvas.paste(frame, extents[:2], frame) # type: ignore
+            frame = image.convert("RGBA")
+            # Full-size frames must paste at (0, 0); offsetting smears pixels.
+            if frame.size == logical_size:
+                canvas.paste(frame, (0, 0), frame)
+            else:
+                canvas.paste(frame, extents[:2], frame) # type: ignore
 
-        keyframes.append(TextureKeyframe(arcade.Texture(canvas.copy()), duration))
+            keyframes.append(TextureKeyframe(arcade.Texture(canvas.copy()), duration))
 
-        if disposal == 2:
-            w, h = extents[2] - extents[0], extents[3] - extents[1] # type: ignore
-            canvas.paste(Image.new("RGBA", (w, h), (0, 0, 0, 0)), extents[:2]) # type: ignore
-        elif disposal == 3:
-            canvas = previous.copy()
+            if disposal == 2:
+                w, h = extents[2] - extents[0], extents[3] - extents[1] # type: ignore
+                canvas.paste(Image.new("RGBA", (w, h), (0, 0, 0, 0)), extents[:2]) # type: ignore
+            elif disposal == 3:
+                canvas = previous.copy()
 
     animation = TextureAnimation(keyframes)
     _animation_cache[path] = animation
@@ -107,19 +109,28 @@ class GameView(arcade.View):
         height = self.window.height
         center_x, center_y = width / 2, height / 2
 
-        self.mouth = FacePart("mouth", center_x, center_y + MOUTH_OFFSET_Y, MOUTH_SCALE)
-        self.eyes = FacePart("eyes", center_x, center_y + EYES_OFFSET_Y, EYES_SCALE)
-        self.background_image = arcade.load_texture(file_path=BACKGROUND_IMAGE_PATH)
-        self.background_image.height = height;
-        self.background_image.width = width;
-        self.background_sprite = arcade.Sprite(self.background_image, center_x=center_x, center_y=center_y)
+        if not hasattr(self, "mouth"):
+            self.mouth = FacePart("mouth", center_x, center_y + MOUTH_OFFSET_Y, MOUTH_SCALE)
+            self.eyes = FacePart("eyes", center_x, center_y + EYES_OFFSET_Y, EYES_SCALE)
+            self.background_image = arcade.load_texture(file_path=BACKGROUND_IMAGE_PATH)
+            self.background_sprite = arcade.Sprite(self.background_image, center_x=center_x, center_y=center_y)
 
-        self.mouth_list = arcade.SpriteList()
-        self.mouth_list.append(self.mouth)
-        self.eyes_list = arcade.SpriteList()
-        self.eyes_list.append(self.eyes)
-        self.others_list = arcade.SpriteList()
-        self.others_list.append(self.background_sprite);
+            self.mouth_list = arcade.SpriteList()
+            self.mouth_list.append(self.mouth)
+            self.eyes_list = arcade.SpriteList()
+            self.eyes_list.append(self.eyes)
+            self.others_list = arcade.SpriteList()
+            self.others_list.append(self.background_sprite)
+
+        # Redimensiona sem recriar sprites, listas ou animações.
+        self.background_sprite.center_x = center_x
+        self.background_sprite.center_y = center_y
+        self.background_sprite.width = width
+        self.background_sprite.height = height
+        self.mouth.center_x = center_x
+        self.mouth.center_y = center_y + MOUTH_OFFSET_Y
+        self.eyes.center_x = center_x
+        self.eyes.center_y = center_y + EYES_OFFSET_Y
 
     def on_draw(self) -> None:
         self.clear()
@@ -175,6 +186,10 @@ def set_state(state: str) -> dict[str, str]:
 
 
 def main():
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
     threading.Thread(
         target=lambda: uvicorn.run(app, host="127.0.0.1", port=HTTP_PORT, log_level="info"),
         daemon=True,

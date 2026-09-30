@@ -11,7 +11,7 @@ SAMPLE_RATE_HW = 48000
 CHANNELS_HW = NUMBER_OF_CHANNELS
 FRAME_SAMPLES_HW = 3840 # Equivalente a 1280 (exigido pelo OpenWakeWord) * 3
 
-audio_queue = queue.Queue()
+audio_queue = queue.Queue(maxsize=64)
 
 
 def _resolve_input_device():
@@ -37,7 +37,18 @@ def audio_callback(indata, frames, time_info, status):
         print(status)
     # O DJI entrega estéreo em 48 kHz; o OpenWakeWord recebe mono em 16 kHz.
     mono = indata.mean(axis=1).astype(np.int16)
-    audio_queue.put(mono[::3].copy())
+    data = mono[::3].copy()
+    try:
+        audio_queue.put_nowait(data)
+    except queue.Full:
+        try:
+            audio_queue.get_nowait()
+        except queue.Empty:
+            pass
+        try:
+            audio_queue.put_nowait(data)
+        except queue.Full:
+            pass
 
 class WakeWordDetector:
 

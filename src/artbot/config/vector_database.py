@@ -64,7 +64,7 @@ def getContext(prompt):
         )["documents"][0] # type: ignore
 
     contexto = "\n".join(busca)
-    print("Contexto utilizado: " + contexto)
+    # print("Contexto utilizado: " + contexto)
     return contexto
 
 

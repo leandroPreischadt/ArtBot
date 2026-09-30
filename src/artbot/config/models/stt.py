@@ -10,12 +10,14 @@ from artbot.config.settings import (
     STT_BEAM_SIZE,
     STT_LANGUAGE,
     STT_MODEL_SIZE,
+    STT_MAX_RECORDING_SECONDS,
 )
 import sounddevice as sd
 import numpy as np
 import queue
 import collections
 import webrtcvad
+import logging
 
 # Variáveis do Hardware (DJI Mic)
 SAMPLE_RATE_HW = 48000     
@@ -27,7 +29,10 @@ FRAME_SAMPLES_HW = int(SAMPLE_RATE_HW * FRAME_MS / 1000) # 1440 amostras
 SAMPLE_RATE_AI = 16000
 FRAME_SAMPLES_AI = int(SAMPLE_RATE_AI * FRAME_MS / 1000) # 480 amostras
 
-audio_queue = queue.Queue()
+logger = logging.getLogger(__name__)
+
+# Evita que uma falha/pausa do consumidor faça a RAM crescer indefinidamente.
+audio_queue = queue.Queue(maxsize=64)
 
 def load_stt_model():
     requested_cuda = DEVICE == "cuda"
@@ -65,7 +70,18 @@ def audio_callback(indata, frames, time_info, status):
     mono = indata.mean(axis=1).astype(np.int16)
 
     # Downsample 48 kHz -> 16 kHz.
-    audio_queue.put(mono[::3].copy().tobytes())
+    data = mono[::3].copy().tobytes()
+    try:
+        audio_queue.put_nowait(data)
+    except queue.Full:
+        try:
+            audio_queue.get_nowait()
+        except queue.Empty:
+            pass
+        try:
+            audio_queue.put_nowait(data)
+        except queue.Full:
+            logger.warning("Fila de áudio STT cheia; descartando frame")
     
 def record_until_silence():
     vad = webrtcvad.Vad(VAD_AGGRESSIVENESS)
@@ -76,6 +92,8 @@ def record_until_silence():
     speech_started = False
     voiced_frames = 0
     silent_frames = 0
+    max_frames = max(1, int(STT_MAX_RECORDING_SECONDS * 1000 / FRAME_MS))
+    received_frames = 0
     
     print("Waiting voice...")
     
@@ -87,8 +105,9 @@ def record_until_silence():
         blocksize=FRAME_SAMPLES_HW,
         callback=audio_callback,
     ):
-         while True:
+         while received_frames < max_frames:
             frame = audio_queue.get()
+            received_frames += 1
 
             # Como o frame já foi convertido no callback, esperamos os bytes de 16kHz
             expected_bytes = FRAME_SAMPLES_AI * 2
@@ -125,6 +144,10 @@ def record_until_silence():
                 if silent_frames >= END_SILENCE_FRAMES:
                     print("Recorded voice.")
                     break
+
+    if not speech_started:
+        print("Nenhuma voz detectada dentro do limite de gravação.")
+        return np.empty(0, dtype=np.float32)
                     
     audio = np.frombuffer(buffer, dtype=np.int16)
     audio = audio.astype(np.float32) / 32768.0 # type: ignore
@@ -133,6 +156,9 @@ def record_until_silence():
 
 def whisper_model(model): 
     audio = record_until_silence()
+
+    if audio.size == 0:
+        return ""
     
     segments, info = model.transcribe(
         audio,
