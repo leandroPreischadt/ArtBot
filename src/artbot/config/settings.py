@@ -90,4 +90,13 @@ HTTP_PORT = _int_env("HTTP_PORT", 8383)
 _database_path = Path(os.getenv("DATABASE_PATH") or BASE_DIR / "data" / "chroma")
 DATABASE_PATH = str(_database_path if _database_path.is_absolute() else BASE_DIR / _database_path)
 
+_conversation_log_path = Path(
+    os.getenv("CONVERSATION_LOG_PATH") or BASE_DIR / "data" / "conversations.txt"
+)
+CONVERSATION_LOG_PATH = str(
+    _conversation_log_path
+    if _conversation_log_path.is_absolute()
+    else BASE_DIR / _conversation_log_path
+)
+
 NUMBER_OF_CHANNELS = int(os.getenv("NUMBER_OF_CHANNELS", "2"))

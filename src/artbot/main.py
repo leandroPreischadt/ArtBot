@@ -3,7 +3,13 @@ import time
 
 from artbot.config.vector_database import getContext, populate_vector_database
 from artbot.config.paths import MODELS_DIR
-from artbot.config.settings import AUDIO_DEVICE, DEVICE, MODEL_NAME
+from artbot.config.settings import (
+    AUDIO_DEVICE,
+    CONVERSATION_LOG_PATH,
+    DEVICE,
+    MODEL_NAME,
+)
+from artbot.config.conversation_store import ConversationStore
 from artbot.config.models.stt import load_stt_model, whisper_model
 from artbot.config.models.llm import *
 from artbot.config.models.tts import load_piper_model, piper_model
@@ -30,6 +36,7 @@ def main() -> None:
     loaded_tts_model = load_piper_model()
     wakeword = WakeWordDetector()
     populate_vector_database()
+    conversation_store = ConversationStore(CONVERSATION_LOG_PATH)
 
     ultima_interacao = None
 
@@ -45,6 +52,7 @@ def main() -> None:
             if not my_text:
                 continue
 
+            interaction_id = conversation_store.save_question(my_text)
             context = getContext(my_text)
             previous_interaction = ultima_interacao
             ultima_interacao = None
@@ -58,6 +66,7 @@ def main() -> None:
                 "question": my_text,
                 "answer": llm_answer,
             }
+            conversation_store.save_answer(interaction_id, llm_answer)
             face_service.set_state(FaceState.SPEAKING)
             piper_model(voice=loaded_tts_model, text=llm_answer)
         except KeyboardInterrupt:
