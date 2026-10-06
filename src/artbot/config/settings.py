@@ -67,7 +67,7 @@ OFFLOAD_KQV = _bool_env("OFFLOAD_KQV", True)
 # STT tuning.  beam_size=1 is substantially faster for short assistant
 # commands and can be raised in .env when transcription quality is preferred.
 STT_MODEL_SIZE = os.getenv("STT_MODEL_SIZE", "base")
-STT_BEAM_SIZE = _int_env("STT_BEAM_SIZE", 1)
+STT_BEAM_SIZE = _int_env("STT_BEAM_SIZE", 3)
 STT_LANGUAGE = os.getenv("STT_LANGUAGE", "pt")
 STT_MAX_RECORDING_SECONDS = _int_env("STT_MAX_RECORDING_SECONDS", 30)
 

@@ -52,7 +52,6 @@ audio/
 *.wav
 *.mp3
 *.ogg
-*.log
 
 # Sistema operacional
 .DS_Store

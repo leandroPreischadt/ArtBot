@@ -187,6 +187,8 @@ def set_state(state: str) -> dict[str, str]:
 
 def main():
     logging.basicConfig(
+        filemode="w",
+        filename=Path(__file__).parent / "face.log",
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )

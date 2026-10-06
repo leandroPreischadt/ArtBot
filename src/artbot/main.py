@@ -1,6 +1,8 @@
 import logging
 import time
 
+from llama_cpp import Path
+
 from artbot.config.vector_database import getContext, populate_vector_database
 from artbot.config.paths import MODELS_DIR
 from artbot.config.settings import AUDIO_DEVICE, DEVICE, MODEL_NAME
@@ -17,6 +19,8 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     logging.basicConfig(
+        filemode="w",
+        filename=Path(__file__).parent / "llm.log",
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
